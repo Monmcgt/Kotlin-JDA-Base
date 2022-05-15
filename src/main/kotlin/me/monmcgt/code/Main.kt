@@ -17,9 +17,9 @@ class Main {
 
             val commandManager = CommandManager.getInstance()
             commandManager.init()
-            commandManager.getAllRegisteredCommands().forEach {
+            /*commandManager.getAllRegisteredCommands().forEach {
                 println("Registered command: ${it::class.java.simpleName}")
-            }
+            }*/
         }
     }
 }

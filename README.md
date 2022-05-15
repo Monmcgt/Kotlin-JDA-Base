@@ -1,10 +1,12 @@
 # Kotlin JDA Base
-<hr>
+
+[//]: # (<hr>)
 
 A JDA Starter Project in Kotlin with a few features.
 
 ## Important Classes / Packages
-<hr>
+
+[//]: # (<hr>)
 
 <ul>
 <li>
@@ -16,7 +18,8 @@ A JDA Starter Project in Kotlin with a few features.
 </ul>
 
 ## How to use
-<hr>
+
+[//]: # (<hr>)
 
 <ul>
 <li>
@@ -68,7 +71,8 @@ class UserAvatar : CommandAbstract() {
 ```
 
 ## Library
-<hr>
+
+[//]: # (<hr>)
 
 <ul>
 <li>
@@ -80,7 +84,8 @@ class UserAvatar : CommandAbstract() {
 </ul>
 
 ## Inspiration
-<hr>
+
+[//]: # (<hr>)
 
 <ul>
 <li>

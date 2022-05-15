@@ -2,7 +2,7 @@ package me.monmcgt.code.util
 
 import java.io.File
 
-class ClassScanner public constructor() {
+class ClassScanner private constructor() {
     companion object {
         @JvmStatic
         private val INSTANCE = ClassScanner()

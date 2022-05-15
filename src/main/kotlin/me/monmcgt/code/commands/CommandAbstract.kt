@@ -1,3 +1,5 @@
+@file:JvmName("CommandAbstract")
+
 package me.monmcgt.code.commands
 
 import me.monmcgt.code.enums.SlashCommandType
@@ -5,9 +7,11 @@ import me.monmcgt.code.jda
 import me.monmcgt.code.util.queueIgnoreException
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.build.OptionData
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 abstract class CommandAbstract : CommandUtility() {
-    protected val optionDataArray = arrayOf<OptionData>()
+    protected open val optionDataArray = arrayOf<OptionData>()
 
     var commandInfo: CommandInfo
 
@@ -30,34 +34,48 @@ abstract class CommandAbstract : CommandUtility() {
 
     fun load() {
         if (commandInfo.autoRegisterSlashCommand) {
+            val executorService = Executors.newFixedThreadPool(20)
             when (commandInfo.slashCommandType) {
                 SlashCommandType.ALL -> {
-                    val upsertCommand = jda!!.upsertCommand(commandName, commandDescription)
-                    if (optionDataArray.isNotEmpty()) {
-                        upsertCommand.addOptions(*optionDataArray)
-                    }
-                    upsertCommand.queueIgnoreException()
-                }
-                SlashCommandType.GUILD_ALL -> {
-                    jda!!.guilds.forEach {
-                        val upsertCommand = it.upsertCommand(commandName, commandDescription)
+                    executorService.submit {
+                        val upsertCommand = jda!!.upsertCommand(commandName, commandDescription)
                         if (optionDataArray.isNotEmpty()) {
                             upsertCommand.addOptions(*optionDataArray)
                         }
                         upsertCommand.queueIgnoreException()
-                        println("Registered command $commandName in guild ${it.name}")
+                    }
+                }
+                SlashCommandType.GUILD_ALL -> {
+                    jda!!.guilds.forEach {
+                        executorService.submit {
+                            val upsertCommand = it.upsertCommand(commandName, commandDescription)
+                            if (optionDataArray.isNotEmpty()) {
+                                upsertCommand.addOptions(*optionDataArray)
+                            }
+                            upsertCommand.queueIgnoreException()
+//                        println("Registered command $commandName in guild ${it.name}")
+                        }
                     }
                 }
                 SlashCommandType.GUILD_SPECIFIC -> {
                     commandInfo.guilds.forEach {
-                        val upsertCommand = jda!!.getGuildById(it)?.upsertCommand(commandName, commandDescription)
-                        if (optionDataArray.isNotEmpty()) {
-                            upsertCommand?.addOptions(*optionDataArray)
+                        executorService.submit {
+                            val upsertCommand = jda!!.getGuildById(it)?.upsertCommand(commandName, commandDescription)
+                            if (optionDataArray.isNotEmpty()) {
+                                upsertCommand?.addOptions(*optionDataArray)
+                            }
+                            upsertCommand?.queueIgnoreException()
                         }
-                        upsertCommand?.queueIgnoreException()
                     }
                 }
             }
+            Thread {
+                executorService.shutdown()
+                val awaitTermination = executorService.awaitTermination(3, TimeUnit.MINUTES)
+                if (!awaitTermination) {
+                    executorService.shutdownNow()
+                }
+            }.start()
         }
     }
 
@@ -65,7 +83,7 @@ abstract class CommandAbstract : CommandUtility() {
         if (event.name != commandName) {
             return false
         }
-        val options = event.options
+        /*val options = event.options
         if (options.size != optionDataArray.size) {
             return false
         }
@@ -83,7 +101,7 @@ abstract class CommandAbstract : CommandUtility() {
             } catch (e: ArrayIndexOutOfBoundsException) {
                 return false
             }
-        }
+        }*/
         return true
     }
 }

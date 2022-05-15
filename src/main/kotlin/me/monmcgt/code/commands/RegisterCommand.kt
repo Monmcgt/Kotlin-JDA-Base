@@ -1,3 +1,5 @@
+@file:JvmName("RegisterCommand")
+
 package me.monmcgt.code.commands
 
 @Target(AnnotationTarget.CLASS)

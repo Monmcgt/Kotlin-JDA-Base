@@ -1,3 +1,5 @@
+@file:JvmName("CommandInfo")
+
 package me.monmcgt.code.commands
 
 import me.monmcgt.code.enums.SlashCommandType

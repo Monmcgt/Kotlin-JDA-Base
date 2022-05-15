@@ -5,9 +5,9 @@ import me.monmcgt.code.commands.CommandInfo
 import me.monmcgt.code.commands.RegisterCommand
 
 @RegisterCommand
-@CommandInfo("ping", "responds with pong", autoDeferReply = false)
+@CommandInfo(name = "ping", description = "responds with pong")
 class Ping : CommandAbstract() {
     override fun onSlashCommandInteraction() {
-        sendEmphemralMessage("pong")
+        sendEmphemralMessage("Pong!")
     }
 }

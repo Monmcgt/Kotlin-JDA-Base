@@ -113,6 +113,6 @@ class YourName : CommandAbstract() {
 
 <ul>
 <li>
-<strong><a href="https://spring.io">Spring Framework</a></strong> - Commands registering system (Java Reflect)
+<strong><a href="https://spring.io">Spring Framework</a></strong> - Commands registering system (<a href="https://www.oracle.com/technical-resources/articles/java/javareflection.html">Java Reflection</a>)
 </li>
 </ul>
